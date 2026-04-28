@@ -4,30 +4,27 @@ import anthropic
 from pydantic import BaseModel
 
 from agents.code_agent import CodeAgent
-from agents.email_agent import EmailAgent
-from agents.research_agent import ResearchAgent
-from agents.travel_agent import TravelAgent
+from agents.email_calendar_agent import EmailCalendarAgent
+from agents.research_travel_agent import ResearchTravelAgent
 
 
 class _Route(BaseModel):
-    agent: Literal["code", "email", "research", "travel"]
+    agent: Literal["code", "productivity", "research"]
 
 
 _ROUTING_SYSTEM = """You are a task router. Classify the user request into exactly one category:
 - code: writing, debugging, explaining, or reviewing code
-- email: checking inbox, finding urgent/pending emails, email summaries
-- research: finding information, explaining topics, fact-checking, general knowledge
-- travel: flights, hotels, destinations, itineraries, travel planning and advice"""
+- productivity: emails, calendar, scheduling, meetings, deadlines, inbox management
+- research: finding information, explaining topics, fact-checking, travel planning, destinations"""
 
 
 class Orchestrator:
     def __init__(self):
         self.client = anthropic.Anthropic()
-        self.agents: dict[str, CodeAgent | EmailAgent | ResearchAgent | TravelAgent] = {
+        self.agents: dict[str, CodeAgent | EmailCalendarAgent | ResearchTravelAgent] = {
             "code": CodeAgent(),
-            "email": EmailAgent(),
-            "research": ResearchAgent(),
-            "travel": TravelAgent(),
+            "productivity": EmailCalendarAgent(),
+            "research": ResearchTravelAgent(),
         }
 
     def route(self, user_input: str) -> str:

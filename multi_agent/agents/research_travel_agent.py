@@ -1,16 +1,19 @@
 import anthropic
 
 _SYSTEM = (
-    "You are a research assistant. Use web search to find accurate, up-to-date "
-    "information. Synthesise findings into a clear, well-structured answer. "
-    "Cite sources inline where relevant. If a topic is contested, present multiple "
-    "perspectives fairly."
+    "You are a research and travel specialist. Use web search to find accurate, "
+    "up-to-date information.\n\n"
+    "For research queries: synthesise findings into a clear, well-structured answer. "
+    "Cite sources inline. If a topic is contested, present multiple perspectives.\n\n"
+    "For travel queries: cover current flight options, accommodation, visa requirements, "
+    "local tips, estimated costs, best time to visit, and any relevant advisories. "
+    "Structure responses as: overview → key logistics → budget estimate → practical tips."
 )
 
 _TOOLS = [{"type": "web_search_20260209", "name": "web_search"}]
 
 
-class ResearchAgent:
+class ResearchTravelAgent:
     def __init__(self):
         self.client = anthropic.Anthropic()
 
